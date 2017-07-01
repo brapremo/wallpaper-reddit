@@ -31,7 +31,7 @@ def linux_wallpaper():
     path = os.path.expanduser(config.walldir + "/wallpaper.jpg")
     try:
         if config.setcmd != '':
-            check_call(config.setcmd.split(" "))
+            check_call(config.setcmd, shell=True)
         elif de in ["gnome", "gnome-xorg", "gnome-wayland", "unity", "ubuntu", "budgie-desktop"]:
             check_call(["gsettings", "set", "org.gnome.desktop.background", "picture-uri",
                                    "file://%s" % path])
