@@ -52,6 +52,7 @@ def choose_valid(links):
     if len(links) == 0:
         print("No links were returned from any of those subreddits. Are they valid?")
         sys.exit(1)
+    good_links = []
     for i, origlink in enumerate(links):
         config.log("checking link # {0}: {1}".format(i, origlink))
         link = origlink
@@ -73,10 +74,13 @@ def choose_valid(links):
                 else:
                     return True
 
-        if config.force_dl or not (os.path.isfile(config.walldir + '/url.txt')) or check_same_url(link):
-            return link, i
-    print("No valid links were found from any of those subreddits.  Try increasing the maxlink parameter.")
-    sys.exit(0)
+        good_links.append((link, i))
+            
+    if good_links:
+        return pick_random(good_links)
+    else:
+        print("No valid links were found from any of those subreddits.  Try increasing the maxlink parameter.")
+        sys.exit(0)
 
 
 # in - string - link to check dimensions of
@@ -98,12 +102,12 @@ def check_dimensions(url):
     return False
 
 
-# in: a list of subreddits
+# in: a list
 # out: the name of a random subreddit
-# will pick a random sub from a list of subreddits
-def pick_random(subreddits):
-    rand = random.randint(0, len(subreddits) - 1)
-    return subreddits[rand]
+# will pick a random elemener from provided list
+def pick_random(container):
+    rand = random.randint(0, len(container) - 1)
+    return container[rand]
 
 
 # in - string - a url to match against the blacklist
